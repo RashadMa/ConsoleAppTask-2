@@ -644,81 +644,29 @@ function Main() {
 
 //#endregion
 
-//#region Get Total Amount
-
-// function GetTotalAmount(arr) {
-//   let username = readline.question("Username: ");
-//   arr.map((item) => {
-//     if (item.username === username) {
-//       console.log("salam");
-//     }
-//   });
-// }
-
-//#endregion
-
-function GetDatasByUsername(userArr, cartArr, productArr) {
+function GetDatasByUsername(userArr, productArr, cartsArr) {
   let username = readline.question("Username: ");
-  let user = userArr.find((u) => u.username === username);
-  let cart = cartArr.filter((c) => c.userId === user.id);
-  console.log(cart, "cart");
-  let cartProducts = cart.map((item) => {
-    return item.products;
-  });
-  console.log(cartProducts, 'cartProds');
-  let price = productArr.map((item) => {
-    return item.price;
-  });
-  console.log(price, "price");
-  let productsId = productArr.map((item) => {
-    return item.id;
-  });
-  console.log(productsId, "product's id");
-//   let idk = productArr.map((item) => {
-//     return item.price;
-//   });
-//   let productIds = cart.products.map((p) => {
-//     return p;
-//   });
-//   console.log(productIds, "productIds");
-//   let productId = productIds.map((element) => {
-//     return element.productId;
-//   });
-//   let quantity = productIds.map((element) => {
-//     return element.quantity;
-//   });
-  //   let productsId = products.map((item) => {
-  //     return item.productId;
-  //   });
-  //   let product = products.find((item) => item.id == productsId);
-  //   let product = products.forEach((item) => {
-  //     console.log(item,'asdasdas');
-  //   });
-  //   console.log(product, "product");
-//   console.log(productId, "productId");
 
-//   console.log(quantity, "quantity");
-  //   console.log(cartDetails,'idk');
-  //   let productId = p.find((i) => i.productId === p.id);
-  //   console.log(productId,"producid");
-  //   console.log(productId);
-  //   let product = productArr.find((p) => cart.products.productId === p.id);
-  //   console.log(productIds);
-  //   let productId = productIds.find((p) => p.productId === product.id);
-  //   let product = productArr.find((p) => productId === p.id);
+  let userID = users.find(
+    (x) => x.username.toLowerCase().trim() == username.toLowerCase().trim()
+  ).id;
 
-  // console.log("user", user);
-  //   console.log("product", product);
-  // console.log("cart", cart);
-  //   cart.products.forEach((element) => {
-  //     console.log(element);
-  //   });
+  let userCarts = carts
+    .filter((cart) => cart.userId == userID)
+    .map(({ products }) => [...products]);
 
-  //   return salamId;
-  //   if (user) {
-  //     console.table(user);
-  //   } else
-  //     console.log(
-  //       "-------------------------\nUser not found!!\n-------------------------"
-  //     );
+  let cartItems = [];
+  userCarts.map((cart) => {
+    cartItems.push([...cart]);
+  });
+  let resultArr = cartItems.flat();
+  let total = 0;
+  products.map((product) => {
+    resultArr.map((item) => {
+      if (product.id == item.productId) {
+        total += product.price * item.quantity;
+      }
+    });
+  });
+  console.log("Total is: ", total);
 }
